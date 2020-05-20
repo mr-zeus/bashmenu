@@ -559,66 +559,6 @@ case $response in
 esac
 }
 
-function penj {
-trap "rm $INPUT; exit" SIGHUP SIGINT SIGTERM;
-while true
-do
-dialog --clear --begin 5 5 --no-cancel --backtitle \
- "$HARI,$(date "+%d"-"%m"-"%Y") | IP:$ipclient | USER:$SAYA | MOD-BY :$aku | VER:$ver"   \
---title " <> ==== [ MENU KU ] ==== <> " \
---menu "" 12  70 6 \
-1.CRT "  | CREATE DIRECTORY " \
-2.CTXT	" | COPY FILE TXT DARI SERVER" \
-3.TXTOPDF	" | CONVERT TXT TO PDF       " \
-4.DEL	" | DELETE DIRECTORY PROGRAM       " \
-5.EXIT	" | ENYAHLAH...!!!               "  2> "${INPUT}"
-ret=$?
-case $ret in
-  255)rm -f $INPUT; keluar;
-esac
-
-menuitem=$(<"${INPUT}")
-# make decsion 
-case $menuitem in
-	1.CRT) mkdir $SOUR $DIRV $FIN;;
-	2.CTXT)scp adm1@172.19.52.250:"$FSER/h*.txt $FSER/a*.txt $FSER/c*.txt $FSER/s*.txt" $FIN;;
-        3.TXTOPDF) topdf;;
-	4.DEL) rm -rf $SOUR $DIRV $FIN;;
-	5.EXIT) return;;
-esac
-done
-}
-function topdf {
-clear
-echo "                  SCRIPT TXT TO PDF "
-echo " "
-echo -n "Masukkan tanggal : "
-read input
-clear
-echo "		 ====PILIH BENAR SATU===="
-echo " 		h) PENJUALAN HARIAN "
-echo " 		a) PENJUALAN AKUMULASI "
-echo " 		c) PERJUALAN PERMCLAS "
-echo "		s) PENJUALAN PERSKU "
-echo " 		v) LAPORAN VOID "
-echo " 		========================"
-echo -n "		 PILIHAN : "
-read dev
-clear
-enscript -B --margins=10:10: -o outputfile.ps -f Courier@5.8/10 $SOUR/$dev$input$ext
-ps2pdfwr outputfile.ps $SOUR/$dev$input$bln.pdf
-rm outputfile.ps
-echo -n " Page : "
-read pag
-if [ ! -f $DIRV/$dev ]
-then
-    mkdir $DIRV/$dev
-fi
-clear
-pdftk $SOUR/$dev$input$bln.pdf cat $pag output  $DIRV/$dev/templ.pdf
-mv $DIRV/$dev/templ.pdf $DIRV/$dev/$input$bln.pdf
-rm $SOUR/*.pdf
-}
 ###############################################################
 ###############################################################
 #Tampilan Menu Utama
@@ -632,9 +572,8 @@ dialog --clear --begin 5 8 --no-cancel --backtitle \
 --menu "" 12  70 6 \
 1.ALL	" | CANCEL ALL PRINT & DELETE DUPLICATE" \
 2.PRINTER	" | SETTING PRINTER       " \
-3.PENJ " | LAPORAN PENJUALAN " \
-4.DEV	" | *^#*%^@&*%@&$%%($*^      " \
-5.EXIT	" | ENYAHLAH...!!!               "  2> "${INPUT}"
+3.DEV	" | *^#*%^@&*%@&$%%($*^      " \
+4.EXIT	" | ENYAHLAH...!!!               "  2> "${INPUT}"
 ret=$?
 case $ret in
   255)rm -f $INPUT; keluar;
@@ -645,7 +584,6 @@ menuitem=$(<"${INPUT}")
 case $menuitem in
 	1.ALL)all ;asu ;;
         2.PRINTER) print;;
-	3.PENJ) penj ;;
         4.DEV) dev;;
         5.EXIT)history -c :
 	rm ~/.bash_history ;
