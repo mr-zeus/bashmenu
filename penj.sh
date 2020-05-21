@@ -41,18 +41,23 @@ function pesan {
     return;
 }
 function tes {
+if [[ ! -e $folder ]]; then
+    mkdir $folder
+elif [[ ! -d $folder ]]; then
+    echo "$folder already exists but is not a directory" 1>&2
+fi
 enscript -B --margins=10:10: -o outputfile.ps -f Courier@$ukn/10 $SOUR/$dev$input$ext 
 ps2pdfwr outputfile.ps $SOUR/$dev$input$bln.pdf
 rm outputfile.ps
 echo -n " Page : "
 read pag
-if [ ! -f $DIRV/$dev ]
-then
-    mkdir $DIRV/$dev
+if [[ ! -e $folder ]]; then
+    mkdir $folder
+elif [[ ! -d $folder ]]; then
+    echo "$folder already exists but is not a directory" 1>&2
 fi
-clear
-pdftk $SOUR/$dev$input$bln.pdf cat $pag output  $DIRV/$dev/templ.pdf
-mv $DIRV/$dev/templ.pdf $DIRV/$dev/$input$bln.pdf
+pdftk $SOUR/$dev$input$bln.pdf cat $pag output  $folder/templ.pdf
+mv $folder/templ.pdf $folder/$input$bln.pdf
 rm $SOUR/*.pdf
 }
 function tgl {	
@@ -89,10 +94,10 @@ esac
 menuitem=$(<"${INPUT}")
 # make decsion 
 case $menuitem in
-	1.HARIAN)dev=h;ukn=5.8;tes;;
-	2.AKUMULASI)dev=a;ukn=5.8;tes;;
-        3.MCLASS)dev=c;ukn=7.6;tes;;
-	4.SKU)dev=s;ukn=7.6;tes;;
+	1.HARIAN)dev=h;ukn=5.8;folder=$DIRV/harian;tes;;
+	2.AKUMULASI)dev=a;ukn=5.8;folder=$DIRV/akumulasi;tes;;
+        3.MCLASS)dev=c;ukn=7.6;folder=$DIRV/mclass;tes;;
+	4.SKU)dev=s;ukn=7.6;folder=$DIRV/persku;tes;;
 	5.LAINYA);;
 	6.EXIT) return;;
 esac
