@@ -12,7 +12,8 @@ trap "rm $INPUT; exit" SIGHUP SIGINT SIGTERM;
 ver=2.1
 SAYA=$(whoami);
 aku=@dhii_mr
-ipclient=$(ip route get 1 | awk '{print $NF;exit}')
+#ipclient=$(ip route get 1 | awk '{print $NF;exit}')
+myip=$(hostname -I | awk '{print $1}')
 date=$(date +%u)
 case $date in
 1)HARI=Senen;;
@@ -77,7 +78,7 @@ trap "rm $INPUT; exit" SIGHUP SIGINT SIGTERM;
 while true
 do
 dialog --clear --begin 5 5 --no-cancel --backtitle \
- "$HARI,$(date "+%d"-"%m"-"%Y") | IP:$ipclient | USER:$SAYA | MOD-BY :$aku | VER:$ver"   \
+ "$HARI,$(date "+%d"-"%m"-"%Y") | IP:$myip | USER:$SAYA | MOD-BY :$aku | VER:$ver"   \
 --title " <> ==== [ MENU KU ] ==== <> " \
 --menu "" 12  70 6 \
 1.HARIAN " | PENJUALAN HARIAN " \
@@ -126,7 +127,7 @@ trap "rm $INPUT; exit" SIGHUP SIGINT SIGTERM;
 while true
 do
 dialog --clear --begin 5 8 --no-cancel --backtitle \
- "$HARI,$(date "+%d"-"%m"-"%Y") | IP:$ipclient | USER:$SAYA | MOD-BY :$aku | VER:$ver"   \
+ "$HARI,$(date "+%d"-"%m"-"%Y") | IP:$myip | USER:$SAYA | MOD-BY :$aku | VER:$ver"   \
 --title " <> ==== [ MENU KU ] ==== <> " \
 --menu "" 12  65 6 \
 1.CRT " | CREATE DIRECTORY " \
