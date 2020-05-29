@@ -13,7 +13,9 @@ ver=2.1
 SAYA=$(whoami);
 aku=@dhii_mr
 #ipclient=$(ip route get 1 | awk '{print $NF;exit}')
-myip=$(hostname -I | awk '{print $1}')
+#myip=$(hostname -I | awk '{print $1}';)
+myip=$(ip route get 1 | sed -n 's/^.*src \([0-9.]*\) .*$/\1/p'
+)
 date=$(date +%u)
 case $date in
 1)HARI=Senen;;
