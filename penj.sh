@@ -4,6 +4,7 @@ INPUT=/tmp/menu.sh.$$
 OUTPUT="/tmp/out.txt"
 printnya=~/.dosprint
 FSER=/smb/admtoko/data/sls2002
+BSER=/smb/s052/admtoko/data/sls2002
 SOUR=$HOME/.tmp
 DIRV=$HOME/Desktop/out
 bln=$(date +-%m-%G)
@@ -87,7 +88,7 @@ dialog --clear --begin 5 5 --no-cancel --backtitle \
 2.AKUMULASI	" | PENJUALAN AKUMULASI" \
 3.MCLASS	" | PENJUALAN PERMCLASS       " \
 4.SKU	" | PENJUALAN PERSKU       " \
-5.LAINYA " | LAINYA " \
+5.SPM " | SPM HARIAN DAN AKM " \
 6.EXIT	" | ENYAHLAH...!!!               "  2> "${INPUT}"
 ret=$?
 case $ret in
@@ -101,10 +102,13 @@ case $menuitem in
 	2.AKUMULASI)dev=a;ukn=5.8;folder=$DIRV/akumulasi;tes;;
         3.MCLASS)dev=c;ukn=7.6;folder=$DIRV/mclass;tes;;
 	4.SKU)dev=s;ukn=7.6;folder=$DIRV/persku;tes;;
-	5.LAINYA);;
+	5.SPM)spm;dev=b;ukn=5.8;folder=$DIRV/bazar;tes;;
 	6.EXIT) return;;
 esac
 done
+}
+function spm {
+cat $SOUR/bh$input.txt $SOUR/ba$input.txt > $SOUR/b$input.txt
 }
 function hapus {
 		dialog --title "Print Options" \
@@ -148,7 +152,7 @@ case $menuitem in
 	1.CRT) mkdir $SOUR $DIRV;
 result=$(echo "========FOLDER========\n$SOUR\n$DIRV\n========DIBUAT========")
 		display_result "Done";;
-	2.CTXT)rsync -avzPO adm1@172.19.52.250:$FSER/*.txt $SOUR;
+	2.CTXT)rsync -avzPO adm1@172.19.52.250:$FSER/*.txt $SOUR;rsync -avzPO adm1@172.19.52.250:$BSER/*.txt $SOUR;
 result=$(echo "COPY FILE DARI SERVER")
 		display_result "Done";;
         3.TXTOPDF) tgl;;
